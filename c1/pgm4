@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/etFullName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Full Name"/>
+
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"/>
+
+    <RadioGroup
+        android:id="@+id/rgGender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rbMale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male"/>
+
+        <RadioButton
+            android:id="@+id/rbFemale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female"/>
+    </RadioGroup>
+
+    <CheckBox
+        android:id="@+id/cbSubscribe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subscribe to Newsletter"/>
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit"/>
+
+</LinearLayout>
+
+//JAVA
+
+package com.example.c1pgm4;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    private EditText etFullName, etEmail;
+    private RadioGroup rgGender;
+    private RadioButton rbMale, rbFemale;
+    private CheckBox cbSubscribe;
+    private Button btnSubmit;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etFullName = findViewById(R.id.etFullName);
+        etEmail = findViewById(R.id.etEmail);
+        rgGender = findViewById(R.id.rgGender);
+        rbMale = findViewById(R.id.rbMale);
+        rbFemale = findViewById(R.id.rbFemale);
+        cbSubscribe = findViewById(R.id.cbSubscribe);
+        btnSubmit = findViewById(R.id.btnSubmit);
+
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Perform form validation
+                if (validateForm()) {
+                    // Form is valid, process the registration
+                    String fullName = etFullName.getText().toString();
+                    String email = etEmail.getText().toString();
+                    String gender = rbMale.isChecked() ? "Male" : "Female";
+                    boolean subscribeToNewsletter = cbSubscribe.isChecked();
+
+                    // TODO: Implement registration logic here
+
+                    // Show a success message
+                    Toast.makeText(MainActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private boolean validateForm() {
+        // Validate full name
+        String fullName = etFullName.getText().toString();
+        if (fullName.isEmpty()) {
+            etFullName.setError("Please enter your full name");
+            return false;
+        }
+
+        // Validate email
+        String email = etEmail.getText().toString();
+        if (email.isEmpty()) {
+            etEmail.setError("Please enter your email address");
+            return false;
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            etEmail.setError("Please enter a valid email address");
+            return false;
+        }
+
+        // Validate gender (at least one must be selected)
+        if (!rbMale.isChecked() && !rbFemale.isChecked()) {
+            Toast.makeText(this, "Please select your gender", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Form is valid
+        return true;
+    }
+}
